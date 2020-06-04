@@ -2,7 +2,7 @@
 
 set -u
 
-DEFAULT_POLL_TIMEOUT=20
+DEFAULT_POLL_TIMEOUT=10
 POLL_TIMEOUT=${POLL_TIMEOUT:-$DEFAULT_POLL_TIMEOUT}
 
 git checkout "${GITHUB_REF:11}"
@@ -31,7 +31,7 @@ ci_status="pending"
 until [[ "$ci_status" != "pending" && "$ci_status" != "running" ]]
 do
    sleep $POLL_TIMEOUT
-   ci_output=$(curl --header "PRIVATE-TOKEN: $GITLAB_PASSWORD" --silent "https://${GITLAB_HOSTNAME}/api/v4/projects/${GITLAB_PROJECT_ID}/pipelines/${pipeline_id}")
+   ci_output=$(curl --silent "https://${GITLAB_HOSTNAME}/api/v4/projects/${GITLAB_PROJECT_ID}/pipelines/${pipeline_id}")
    ci_status=$(jq -n "$ci_output" | jq -r .status)
    ci_web_url=$(jq -n "$ci_output" | jq -r .web_url)
    
