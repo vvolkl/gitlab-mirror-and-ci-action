@@ -20,7 +20,7 @@ sh -c "git push mirror $shortbranch"
 sleep $POLL_TIMEOUT
 
 
-pipeline_id=$(curl --header "PRIVATE-TOKEN: $GITLAB_PASSWORD" --silent "https://${GITLAB_HOSTNAME}/api/v4/projects/${GITLAB_PROJECT_ID}/repository/commits/${shortbranch}" | jq '.last_pipeline.id')
+pipeline_id=$(curl --silent "https://${GITLAB_HOSTNAME}/api/v4/projects/${GITLAB_PROJECT_ID}/repository/commits/${shortbranch}" | jq '.last_pipeline.id')
 
 echo "Triggered CI for branch ${shortbranch}"
 echo "Working with pipeline id #${pipeline_id}"
